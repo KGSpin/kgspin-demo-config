@@ -2,17 +2,17 @@
 
 **Reference customer instance config** — Layer 2 in the KGSpin deployment model.
 
-This repo holds the operator-managed configuration for the KGSpin demo instance. It sits *between* the upstream blueprint (`kgspin-archetypes`) and the application (`kgspin-demo-app`). Operators fork this repo to stand up their own instance without modifying the app or the blueprint.
+This repo holds the operator-managed configuration for the KGSpin demo instance. It sits *between* the upstream blueprint (`kgspin-blueprint`) and the application (`kgspin-demo-app`). Operators fork this repo to stand up their own instance without modifying the app or the blueprint.
 
 ## Layer model
 
 | Layer | Repo | Purpose |
 |-------|------|---------|
-| 1 — Blueprint | `kgspin-archetypes` | Upstream-curated pipelines, bundles, LLM alias catalog |
+| 1 — Blueprint | `kgspin-blueprint` | Upstream-curated pipelines, bundles, LLM alias catalog |
 | **2 — Config (this repo)** | `kgspin-demo-config` | Per-instance overrides + fetcher registrations + admin config |
 | 3 — App | `kgspin-demo-app` | Long-running services + UI + benchmarks |
 
-See `kgspin-archetypes` ADR-003 for the full pattern.
+See `kgspin-blueprint` ADR-003 for the full pattern.
 
 ## What lives here
 
@@ -44,11 +44,11 @@ The app resolves this repo via `KGSPIN_DEMO_CONFIG_PATH` (default: sibling direc
 ## What NOT to put here
 
 - **No application code.** App logic lives in `kgspin-demo-app`.
-- **No upstream pipeline definitions.** Those live in `kgspin-archetypes`; override here only when you must diverge.
+- **No upstream pipeline definitions.** Those live in `kgspin-blueprint`; override here only when you must diverge.
 - **No secrets in committed files.** `admin/config.yaml` is gitignored; use env vars for API keys.
 
 ## Related
 
-- Upstream blueprint: `kgspin-archetypes`
+- Upstream blueprint: `kgspin-blueprint`
 - App repo: `kgspin-demo-app`
 - Admin registry: `kgspin-admin`

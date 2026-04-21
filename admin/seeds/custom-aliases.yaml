@@ -1,12 +1,12 @@
 # custom-aliases.yaml — per-instance LLM alias overrides (Layer 2)
 #
-# The blueprint (kgspin-archetypes) ships a canonical LLM alias catalog.
+# The blueprint (kgspin-blueprint) ships a canonical LLM alias catalog.
 # Blueprint aliases are the default; aliases listed here override by id.
 #
 # Leave this file empty (an empty `aliases:` list) if this instance
 # accepts all blueprint aliases unmodified — the kgspin-demo instance
 # does not currently override any aliases.
 #
-# See ADR-002 (kgspin-demo) and ADR-003 §3 (kgspin-archetypes).
+# See ADR-002 (kgspin-demo) and ADR-003 §3 (kgspin-blueprint).
 
 aliases: []

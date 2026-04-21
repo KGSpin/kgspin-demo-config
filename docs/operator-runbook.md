@@ -7,7 +7,7 @@ This runbook describes how the **kgspin-demo** instance is deployed. Fork it for
 - `uv` installed (Python package manager).
 - Python 3.11+.
 - Sibling clones of:
-  - `kgspin-archetypes` (upstream blueprint)
+  - `kgspin-blueprint` (upstream blueprint)
   - `kgspin-admin` (runtime registry service)
   - `kgspin-core`, `kgspin-interface` (libraries)
   - `kgspin-demo-app` (the running services + UI)
