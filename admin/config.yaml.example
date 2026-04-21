@@ -1,0 +1,55 @@
+# config.yaml.example — kgspin-demo-config (Layer 2)
+#
+# Copy to admin/config.yaml (gitignored) and edit with real values for
+# your deployment. The app resolves this file via:
+#   KGSPIN_DEMO_CONFIG_PATH/admin/config.yaml
+# where KGSPIN_DEMO_CONFIG_PATH defaults to the sibling directory
+# `../kgspin-demo-config`.
+#
+# Never commit admin/config.yaml.
+#
+# ADR-001 (kgspin-demo): structural config here; secrets stay in env vars.
+# ADR-003 §7 (kgspin-archetypes): blueprint → config → app layering.
+
+storage:
+  # Absolute path to the corpus root where landers write raw artifacts.
+  # Empty string ⇒ fall back to ~/.kgspin/corpus (legacy default).
+  # Set an absolute path for shared / non-home deployments.
+  corpus_root: ""
+
+  # Directory where compiled extraction bundles live (consumed by the
+  # FastAPI server and the pipeline_common helpers). Relative paths
+  # resolve against the process CWD at entry-point startup.
+  bundles_dir: ".bundles"
+
+security:
+  # CORS allowlist for the FastAPI server at /extract/*. ``["*"]`` is
+  # the dev default; lock this down to the exact origins that should
+  # call the API in any public / partner deployment.
+  cors_origins:
+    - "*"
+
+features:
+  # Pin the default extraction bundle (e.g. "financial-v4.1.0-structural").
+  # Empty string ⇒ auto-latest discovery via pipeline_common.list_bundles.
+  default_bundle: ""
+
+llm:
+  # ADR-002 Phase 4: LLM alias selection for every LLM-invoking call site.
+  #
+  # ``default_alias`` is resolved via kgspin-admin's HTTP registry (see
+  # KGSPIN_ADMIN_URL env var). Leave ``null`` to fall back to the in-repo
+  # legacy ``GeminiBackend()`` path — each fallback emits a
+  # DeprecationWarning, so set an alias before shipping past alpha.
+  #
+  # Per-flow overrides let one endpoint use a different alias without
+  # touching the others. All fields are optional; ``null`` means "use
+  # default_alias for this flow".
+  default_alias: null
+
+  compare_qa_llm: null
+  wtm_llm: null
+  impact_llm: null
+  auto_flag_llm: null
+  auto_discover_tp_llm: null
+  quality_analysis_llm: null

@@ -1,0 +1,23 @@
+# fetchers/registrations.yaml — Layer 2
+#
+# Maps domain → list of fetcher IDs that the kgspin-demo instance uses.
+# A fetcher ID may appear under multiple domains (ADR-004 of kgspin-demo).
+#
+# Fetcher IDs match each lander's ``name`` attribute and admin's FETCHER
+# record id. Landers themselves live in kgspin-demo-app; this file only
+# expresses the operator's choice of which landers serve which domains.
+#
+# Source of truth for the demo instance — derived from
+# kgspin_demo.domain_fetchers.DOMAIN_FETCHERS (Sprint 11).
+
+domains:
+  financial:
+    fetchers:
+      - sec_edgar
+      - marketaux
+      - yahoo_rss
+
+  clinical:
+    fetchers:
+      - clinicaltrials_gov
+      - newsapi
