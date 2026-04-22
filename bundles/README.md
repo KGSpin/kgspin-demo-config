@@ -12,4 +12,12 @@ Leave empty unless you need to diverge from the blueprint. The kgspin-demo insta
 
 ## File layout
 
-One YAML per bundle, named by bundle id (e.g. `financial-v4.1.0-structural.yaml`). Schema matches the upstream blueprint bundle format — see `kgspin-blueprint/references/bundles/`.
+One YAML per bundle, named by bundle id. Schema matches the upstream blueprint bundle format — see `kgspin-blueprint/references/bundles/`.
+
+## Precedence
+
+Bundles follow the same precedence rule as pipeline overrides: if a
+bundle id is defined in both `admin/seeds/` (admin-imported) and in
+this `bundles/` drop-zone, the **admin-imported bundle wins** because
+the app reads admin-resolved bundles as the source of truth. Keep each
+bundle id in exactly one dir.

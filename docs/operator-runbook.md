@@ -70,9 +70,17 @@ overridden) to reach the Intelligence tab.
 
 If you need pipeline or bundle variants that differ from the upstream blueprint:
 
-1. Drop the YAML into `pipelines/<pipeline-id>.yaml` or `bundles/<bundle-id>.yaml`.
-2. Or drop it into `admin/seeds/pipeline-overrides/` and re-run `kgspin-admin import-pipelines`.
+1. Drop the YAML into `admin/seeds/pipeline-overrides/` (the **canonical**
+   drop-zone) and re-run `kgspin-admin import-pipelines`.
+2. Alternative for app-direct loading: drop into `pipelines/<pipeline-id>.yaml`
+   or `bundles/<bundle-id>.yaml`.
 3. Re-start the demo — admin reloads the registry on boot.
+
+**Precedence:** if the same id exists in both `admin/seeds/` and the
+top-level `pipelines/` or `bundles/` dirs, the admin-imported version
+wins (the app reads admin's resolved view). Keep each id in one dir to
+avoid surprise. See `pipelines/README.md` / `bundles/README.md` for the
+full rule.
 
 The blueprint remains authoritative for anything **not** overridden here.
 
