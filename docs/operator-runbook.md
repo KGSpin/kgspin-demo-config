@@ -40,11 +40,21 @@ Secrets (API keys) stay in env vars — never in `config.yaml`:
 ```bash
 export KGSPIN_ADMIN_URL=http://127.0.0.1:8750
 export KGSPIN_DEMO_CONFIG_PATH=/Users/you/repos/kgspin-demo-config
-# Provider-specific:
+# LLM backend:
 export GEMINI_API_KEY=...
-export MARKETAUX_API_KEY=...
-export NEWSAPI_API_KEY=...
+# Fetcher-specific (only those you've registered in fetchers/registrations.yaml):
+export EDGAR_IDENTITY="Your Name your@email.com"   # sec_edgar — SEC compliance
+export MARKETAUX_API_KEY=...                       # marketaux
+export NEWSAPI_KEY=...                             # newsapi
+# Optional:
+export CLINICAL_TRIALS_API_KEY=...                 # clinicaltrials_gov (optional — public API)
+# Not needed: yahoo_rss (no auth)
 ```
+
+Variable names match the lander implementations in kgspin-demo-app
+(`src/kgspin_demo_app/landers/`). Missing a required key surfaces as a
+`FetcherError` on the first call into that lander; it won't block
+startup.
 
 ## Starting the demo
 
@@ -63,8 +73,9 @@ The start script:
    path from `KGSPIN_ADMIN_LOG`, default `/tmp/kgspin-admin.log`).
 4. Launches the FastAPI compare UI (port from `PORT` env var, default `8080`).
 
-Open <http://127.0.0.1:8080/intelligence.html> (substitute `$PORT` if
-overridden) to reach the Intelligence tab.
+Open <http://127.0.0.1:8080/> (substitute `$PORT` if overridden) — the
+root path serves the compare UI. The Intelligence tab is rendered
+inside that page; there is no separate `/intelligence.html` route.
 
 ## Overriding blueprint content
 
@@ -74,7 +85,17 @@ If you need pipeline or bundle variants that differ from the upstream blueprint:
    drop-zone) and re-run `kgspin-admin import-pipelines`.
 2. Alternative for app-direct loading: drop into `pipelines/<pipeline-id>.yaml`
    or `bundles/<bundle-id>.yaml`.
-3. Re-start the demo — admin reloads the registry on boot.
+3. Re-start the demo so the app picks up the new admin-resolved view.
+
+**Admin does not auto-sync on startup by default.** Re-importing is an
+explicit operator step (`kgspin-admin import-pipelines` and
+`kgspin-admin import-aliases`); admin's philosophy is that
+registrations are explicit, not hidden bootstrap magic. If you want
+sync-on-serve for dev convenience, opt in by setting
+`KGSPIN_ADMIN_AUTO_SYNC_BLUEPRINT=1` — this only syncs blueprint-side
+content (pipelines + aliases), not fetcher registrations. Fetcher
+registration is always explicit; see "Registering landers with admin"
+below.
 
 **Precedence:** if the same id exists in both `admin/seeds/` and the
 top-level `pipelines/` or `bundles/` dirs, the admin-imported version
