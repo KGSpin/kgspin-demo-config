@@ -6,10 +6,10 @@
 # where KGSPIN_DEMO_CONFIG_PATH defaults to the sibling directory
 # `../kgspin-demo-config`.
 #
-# Never commit admin/config.yaml.
+# Never commit admin/config.yaml — structural config lives here;
+# secrets (API keys) stay in env vars.
 #
-# ADR-001 (kgspin-demo): structural config here; secrets stay in env vars.
-# ADR-003 §7 (kgspin-archetypes): blueprint → config → app layering.
+# ADR-003 §7 (kgspin-blueprint): blueprint → config → app layering.
 
 storage:
   # Absolute path to the corpus root where landers write raw artifacts.
@@ -30,7 +30,9 @@ security:
     - "*"
 
 features:
-  # Pin the default extraction bundle (e.g. "financial-v4.1.0-structural").
+  # Pin the default extraction bundle by id (domain-neutral placeholder;
+  # real ids come from your blueprint references, e.g. the vertical +
+  # version + flavor tuple shipped by kgspin-blueprint).
   # Empty string ⇒ auto-latest discovery via pipeline_common.list_bundles.
   default_bundle: ""
 
