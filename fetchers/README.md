@@ -37,6 +37,89 @@ All fetcher IDs referenced here must exist in
 ID to the Python class that implements it. Adding a new fetcher ID here
 without a catalog entry will fail registration with a clear error.
 
+## Supported sources
+
+The landers that ship with kgspin-demo-app as of Wave A. Use any
+subset; a fetcher ID may appear under multiple domains.
+
+| Fetcher ID | What it fetches | Auth env var | Registered in demo under |
+|------------|-----------------|--------------|---------------------------|
+| `sec_edgar` | SEC EDGAR filings (10-K / 10-Q / 8-K, XBRL) | `EDGAR_IDENTITY` (required) | `financial` |
+| `marketaux` | Financial news articles keyed to tickers | `MARKETAUX_API_KEY` (required) | `financial` |
+| `yahoo_rss` | Yahoo Finance news RSS | *(none — public feed)* | `financial` |
+| `clinicaltrials_gov` | ClinicalTrials.gov study records | `CLINICAL_TRIALS_API_KEY` (optional) | `clinical` |
+| `newsapi` | General news (NewsAPI.org), term-scoped | `NEWSAPI_KEY` (required) | `clinical` |
+
+### Example entries per source
+
+Each block below is a standalone, copy-pasteable YAML snippet that
+registers one lander under one domain. Combine them in `registrations.yaml`
+under a shared `domains:` root.
+
+**`sec_edgar` — SEC filings for a financial domain:**
+
+```yaml
+domains:
+  financial:
+    fetchers:
+      - sec_edgar
+```
+
+**`marketaux` — financial news keyed to tickers:**
+
+```yaml
+domains:
+  financial:
+    fetchers:
+      - marketaux
+```
+
+**`yahoo_rss` — Yahoo Finance news RSS (no auth):**
+
+```yaml
+domains:
+  financial:
+    fetchers:
+      - yahoo_rss
+```
+
+**`clinicaltrials_gov` — trial records for a clinical domain:**
+
+```yaml
+domains:
+  clinical:
+    fetchers:
+      - clinicaltrials_gov
+```
+
+**`newsapi` — general news, useful under any domain:**
+
+```yaml
+domains:
+  clinical:
+    fetchers:
+      - newsapi
+```
+
+**Combined** (matches what this repo ships in `registrations.yaml`):
+
+```yaml
+domains:
+  financial:
+    fetchers:
+      - sec_edgar
+      - marketaux
+      - yahoo_rss
+  clinical:
+    fetchers:
+      - clinicaltrials_gov
+      - newsapi
+```
+
+Adding a new fetcher beyond this catalog is a kgspin-demo-app change
+(implement the lander + add the entry to `_LANDER_CATALOG`). This YAML
+alone is not enough.
+
 ## Operator workflow
 
 Forking this repo to stand up your own instance:
