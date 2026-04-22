@@ -1,14 +1,30 @@
-# fetchers/registrations.yaml — Layer 2
+# fetchers/registrations.yaml — Layer 2 (authoritative source of truth)
 #
-# Maps domain → list of fetcher IDs that the kgspin-demo instance uses.
-# A fetcher ID may appear under multiple domains (ADR-004 of kgspin-demo).
+# Maps domain → list of fetcher IDs that this instance uses.
+# A fetcher ID may appear under multiple domains (see kgspin-demo-app
+# ADR-004: backend-named landers).
 #
 # Fetcher IDs match each lander's ``name`` attribute and admin's FETCHER
-# record id. Landers themselves live in kgspin-demo-app; this file only
-# expresses the operator's choice of which landers serve which domains.
+# record id. Landers themselves live in kgspin-demo-app; this file is
+# the operator's declaration of which landers serve which domains.
 #
-# Source of truth for the demo instance — derived from
-# kgspin_demo.domain_fetchers.DOMAIN_FETCHERS (Sprint 11).
+# Consumed by ``kgspin_demo_app.domain_fetchers`` (lazy YAML loader) and
+# by ``kgspin-demo-register-fetchers`` (the CLI that writes FETCHER
+# records to admin). The loader resolves this file via the
+# ``KGSPIN_DEMO_CONFIG_PATH`` env var (default: sibling directory
+# ``../kgspin-demo-config``); ``scripts/start-demo.sh`` in kgspin-demo-app
+# exports it for you.
+#
+# Shape:
+#   domains:
+#     <domain>:
+#       fetchers:
+#         - <fetcher_id>
+#         - ...
+#
+# Editing this file changes which landers are registered on the next
+# ``uv run kgspin-demo-register-fetchers`` run. See fetchers/README.md
+# for the full format + operator guidance.
 
 domains:
   financial:

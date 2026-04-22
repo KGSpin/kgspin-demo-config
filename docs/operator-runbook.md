@@ -54,12 +54,17 @@ cd ~/repos/kgspin-demo-app
 ```
 
 The start script:
-1. Resolves `KGSPIN_DEMO_CONFIG_PATH` (default: sibling `../kgspin-demo-config`).
+1. Resolves `KGSPIN_DEMO_CONFIG_PATH` (lead with an explicit env var in
+   Docker / CI / monorepo layouts; local-dev convenience default is the
+   sibling directory `../kgspin-demo-config`).
 2. Exports `KGSPIN_DEMO_CONFIG=$KGSPIN_DEMO_CONFIG_PATH/admin/config.yaml` if the file exists.
-3. Starts `kgspin-admin` in the background if not already responding.
-4. Launches the FastAPI compare UI on port 8080.
+3. Starts `kgspin-admin` in the background if not already responding
+   (URL from `KGSPIN_ADMIN_URL`, default `http://127.0.0.1:8750`; log
+   path from `KGSPIN_ADMIN_LOG`, default `/tmp/kgspin-admin.log`).
+4. Launches the FastAPI compare UI (port from `PORT` env var, default `8080`).
 
-Open <http://127.0.0.1:8080/intelligence.html> to reach the Intelligence tab.
+Open <http://127.0.0.1:8080/intelligence.html> (substitute `$PORT` if
+overridden) to reach the Intelligence tab.
 
 ## Overriding blueprint content
 
@@ -78,10 +83,20 @@ cd ~/repos/kgspin-demo-app
 uv run kgspin-demo-register-fetchers
 ```
 
-This reads `kgspin-demo-config/fetchers/registrations.yaml` (via the app's fetcher registry) and writes records to admin.
+As of Wave A (2026-04-22), this CLI reads
+`kgspin-demo-config/fetchers/registrations.yaml` directly (resolved via
+`KGSPIN_DEMO_CONFIG_PATH`) and writes one FETCHER record per unique
+backend-named lander into admin. Edit the YAML, re-run the command —
+registration is idempotent. See `fetchers/README.md` for the YAML
+format.
 
 ## Logs
 
-- Admin: `/tmp/kgspin-admin.log`
-- Demo compare UI: stdout of `start-demo.sh`
-- Landers: stdout when invoked directly; per-lander files under `$corpus_root/logs/` for batch runs.
+- Admin: `/tmp/kgspin-admin.log` (override via `KGSPIN_ADMIN_LOG`).
+- Demo compare UI: stdout of `start-demo.sh`.
+- Landers: stdout when invoked directly; per-lander files under
+  `$corpus_root/logs/` for batch runs.
+
+For structure / rotation / correlation, see the logging sections in
+`kgspin-demo-app` and `kgspin-admin` — this runbook intentionally does
+not duplicate their stories.
