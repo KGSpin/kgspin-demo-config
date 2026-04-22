@@ -141,7 +141,7 @@ Forking this repo to stand up your own instance:
   contract versions come from the lander classes themselves via
   `_LANDER_CATALOG` introspection.
 - **Credentials / API keys.** Lander auth is env-var driven
-  (`MARKETAUX_API_KEY`, `NEWSAPI_API_KEY`, …). Never commit secrets.
+  (`MARKETAUX_API_KEY`, `NEWSAPI_KEY`, …). Never commit secrets.
 
 ## Related
 
