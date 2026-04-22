@@ -34,7 +34,7 @@ docs/
 
 ```bash
 cp admin/config.yaml.example admin/config.yaml
-# edit admin/config.yaml — fill secrets + paths
+# edit admin/config.yaml — fill paths + instance config (secrets stay in env vars)
 export KGSPIN_DEMO_CONFIG_PATH="$(pwd)"
 cd ../kgspin-demo-app && ./scripts/start-demo.sh
 ```
